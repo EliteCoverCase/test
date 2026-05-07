@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EliteCoverCase | Space Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://www.paypal.com/sdk/js?client-id=AY0NVl684m2ti86qdyMetYhC1STiro69srOsxuKI_udU40sJ4H9GwJyOpdLMmP1JhwCihkbPn_89R_AQ&currency=EUR"></script>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+
+    <div class="stars-container"></div>
+
+    <nav class="navbar">
+        <div class="logo">Elite<span>CoverCase</span></div>
+        <div class="nav-right">
+            <button class="auth-btn" onclick="openAuth()">Login / Register</button>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fa-solid fa-rocket"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>GALAXY COLLECTION</h1>
+        <p>Όλες οι θήκες μόνο <span class="price-tag">10€</span></p>
+    </header>
+
+    <main class="container">
+        <div class="product-grid" id="product-list"></div>
+    </main>
+
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAuth()">&times;</span>
+            <h2 id="auth-title">Σύνδεση</h2>
+            <input type="email" id="email-input" placeholder="Email">
+            <input type="password" id="pass-input" placeholder="Κωδικός">
+            <button class="main-btn-auth" onclick="handleAuth()">Είσοδος</button>
+            <p onclick="toggleAuthType()" id="auth-switch">Δεν έχεις λογαριασμό; Εγγραφή</p>
+        </div>
+    </div>
+
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header">
+            <h3>Space Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+
+        <div class="boxnow-info">
+            <p>🇬🇷 Θα λάβετε τον κωδικό <b>Box Now</b> με SMS στο κινητό σας.</p>
+            <p>🇬🇧 You will receive the <b>Box Now</b> code via SMS.</p>
+        </div>
+
+        <div id="cart-items" class="cart-items"></div>
+
+        <div class="checkout-form">
+            <label>Κινητό Τηλέφωνο / Mobile Phone *</label>
+            <input type="tel" id="customer-phone" placeholder="π.χ. 6900000000">
+            <p id="phone-error" style="display:none; color: #ff4d4d; font-size: 12px;">Απαιτείται έγκυρο κινητό</p>
+
+            <label style="margin-top:10px; display:block;">Μοντέλο Κινητού / Phone Model *</label>
+            <input type="text" id="phone-model" placeholder="π.χ. Xiaomi 14, iPhone 15">
+            <p id="model-error" style="display:none; color: #ff4d4d; font-size: 12px;">Παρακαλώ γράψτε το μοντέλο</p>
+        </div>
+
+        <div class="cart-footer">
+            <div class="total">Σύνολο: <span id="cart-total">0.00</span>€</div>
+            <div id="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <div id="overlay" onclick="closeAll()"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
