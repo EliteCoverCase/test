@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EliteCoverCase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="cart-container" onclick="showView('cart-view')">
+            <img src="images/cart.png" alt="Cart" class="cart-icon">
+        </div>
+        <div class="logo-astral" onclick="showView('home-view')">EliteCoverCase</div>
+        <div class="auth-buttons">
+            <button class="btn astral-btn" onclick="showForm('login')">log in</button>
+            <span class="separator">/</span>
+            <button class="btn astral-btn" onclick="showForm('signup')">register</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div id="home-view" class="view active">
+            <div class="grid-container">
+                <button class="product-card" onclick="showView('product-view')">
+                    <img src="images/case.png" alt="Case">
+                </button>
+            </div>
+        </div>
+
+        <div id="product-view" class="view">
+            <div class="product-page-layout">
+                <div class="product-img-box">
+                    <img src="images/case.png" alt="Case Photo">
+                </div>
+                <div class="product-info">
+                    <h1 class="astral-text">Tung Tung Tung Sahur Case</h1>
+                    <button class="select-btn astral-btn" onclick="toggleDropdown()">select phone</button>
+                    <div id="phone-dropdown" class="dropdown-content">
+                        <p onclick="selectBrand('iPhone')">iPhone</p>
+                        <p onclick="selectBrand('Samsung')">Samsung</p>
+                        <p onclick="selectBrand('Xiaomi')">Xiaomi</p>
+                        <p onclick="selectBrand('Honor')">Honor</p>
+                    </div>
+                    <div class="price-section">
+                        <p>ΤΙΜΗ: <span class="green-price">10 ΕΥΡΩ</span></p>
+                    </div>
+                    <button class="add-to-cart-btn astral-btn" onclick="addToCart()">ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
