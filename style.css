@@ -1,0 +1,61 @@
+:root { --primary: #9d4edd; --dark: #10002b; --light: #e0aaff; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+body { background: var(--dark); color: white; overflow-x: hidden; }
+
+.stars-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    z-index: -1;
+}
+
+.navbar { 
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 5%; background: rgba(16, 0, 43, 0.95);
+    position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--primary);
+}
+
+.logo { font-size: 1.8rem; font-weight: bold; }
+.logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.auth-btn { background: transparent; border: 1px solid var(--primary); color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+.auth-btn:hover { background: var(--primary); }
+
+.cart-icon { cursor: pointer; position: relative; font-size: 1.5rem; color: var(--primary); }
+#cart-count { position: absolute; background: white; color: var(--dark); border-radius: 50%; padding: 2px 7px; font-size: 12px; top: -10px; right: -15px; font-weight: bold; }
+
+.hero { text-align: center; padding: 60px 20px; }
+.hero h1 { font-size: 3rem; text-shadow: 0 0 20px var(--primary); margin-bottom: 10px; }
+
+.container { padding: 20px 5%; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; }
+
+.product-card { 
+    background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; text-align: center; 
+    border: 1px solid rgba(157, 78, 221, 0.2); transition: 0.3s;
+}
+.product-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+.product-card img { width: 100%; border-radius: 15px; margin-bottom: 10px; height: 220px; object-fit: cover; }
+
+.add-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; }
+.add-btn:hover { background: #7b2cbf; }
+
+.cart-drawer { position: fixed; right: -400px; top: 0; width: 350px; height: 100%; background: var(--dark); z-index: 1000; transition: 0.4s; padding: 20px; border-left: 2px solid var(--primary); overflow-y: auto; }
+.cart-drawer.active { right: 0; }
+#overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; }
+#overlay.active { display: block; }
+
+.boxnow-info { background: rgba(157, 78, 221, 0.15); padding: 12px; border-radius: 10px; font-size: 12px; margin-bottom: 15px; border-left: 4px solid var(--primary); }
+.checkout-form { margin: 15px 0; padding: 15px 0; border-top: 1px solid #3c096c; }
+.checkout-form label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--light); }
+.checkout-form input { width: 100%; padding: 12px; background: #240046; border: 1px solid var(--primary); color: white; border-radius: 8px; outline: none; }
+#phone-error { color: #ff4d4d; font-size: 11px; display: none; margin-top: 5px; }
+
+.total { font-size: 1.6rem; font-weight: bold; margin-bottom: 20px; color: var(--light); text-align: center; }
+
+.modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
+.modal-content { background: var(--dark); border: 2px solid var(--primary); width: 320px; margin: 15% auto; padding: 30px; border-radius: 20px; text-align: center; position: relative; }
+.modal-content input { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: none; background: #240046; color: white; }
+.main-btn-auth { background: var(--primary); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+.close { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; color: var(--primary); }
+#auth-switch { cursor:pointer; margin-top:15px; font-size:12px; text-decoration: underline; }
