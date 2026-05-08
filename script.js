@@ -1,5 +1,5 @@
 // ==========================================
-// 1. ΡΥΘΜΙΣΕΙΣ EMAILJS
+// 1. ΡΥΘΜΙΣΕΙΣ EMAILJS & ΑΡΧΙΚΟΠΟΙΗΣΗ
 // ==========================================
 const EMAILJS_PUBLIC_KEY = "7cDMjJn9hC9K7ULgA"; 
 const EMAILJS_SERVICE_ID = "service_xj8pfgk"; 
@@ -11,8 +11,31 @@ let isLoggedIn = false;
 let cart = [];
 let isLogin = true;
 
+// Περιμένουμε να φορτώσει το HTML
+document.addEventListener('DOMContentLoaded', () => {
+    createStars(); // Δημιουργία αστεριών στο φόντο
+    renderProducts(); // Εμφάνιση προϊόντων
+    updateCartUI();
+});
+
 // ==========================================
-// 2. Η ΛΙΣΤΑ ΜΕ ΤΑ CUSTOM ΟΝΟΜΑΤΑ ΣΟΥ
+// 2. ΔΗΜΙΟΥΡΓΙΑ BACKGROUND (STARS)
+// ==========================================
+function createStars() {
+    const container = document.querySelector('.stars-container');
+    if (!container) return;
+    for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(star);
+    }
+}
+
+// ==========================================
+// 3. ΛΙΣΤΑ ΠΡΟΪΟΝΤΩΝ & ΕΜΦΑΝΙΣΗ
 // ==========================================
 const customProducts = [
     { id: 1, name: "Tung Tung Tung Sahur Case", price: 10, img: "images/case1.png" },
@@ -24,22 +47,12 @@ const customProducts = [
     { id: 7, name: "Olympiakos Case", price: 10, img: "images/case7.png" },
     { id: 8, name: "Panauenaikos Case", price: 10, img: "images/case8.png" },
     { id: 9, name: "Aek Case", price: 10, img: "images/case9.png" },
-    { id: 10, name: "Out Of Stock", price: 10, img: "images/case10.png" },
-    { id: 11, name: "Out Of Stock", price: 10, img: "images/case11.png" },
-    { id: 12, name: "Out Of Stock", price: 10, img: "images/case12.png" },
-    { id: 13, name: "Out Of Stock", price: 10, img: "images/case13.png" },
-    { id: 14, name: "Out Of Stock", price: 10, img: "images/case14.png" },
-    { id: 15, name: "Out Of Stock", price: 10, img: "images/case15.png" },
-    { id: 16, name: "Out Of Stock", price: 10, img: "images/case16.png" },
-    { id: 17, name: "Out Of Stock", price: 10, img: "images/case17.png" },
-    { id: 18, name: "Out Of Stock", price: 10, img: "images/case18.png" },
-    { id: 19, name: "Out Of Stock", price: 10, img: "images/case19.png" },
-    { id: 20, name: "Out Of Stock", price: 10, img: "images/case20.png" }
+    { id: 10, name: "Out Of Stock", price: 10, img: "images/case10.png" }
 ];
 
-// Εμφάνιση προϊόντων
-const productList = document.getElementById('product-list');
-if (productList) {
+function renderProducts() {
+    const productList = document.getElementById('product-list');
+    if (!productList) return;
     productList.innerHTML = ""; 
     customProducts.forEach(product => {
         const isOutOfStock = product.name === "Out Of Stock";
@@ -61,22 +74,26 @@ if (productList) {
 }
 
 // ==========================================
-// 3. ΔΙΑΧΕΙΡΙΣΗ ΚΑΛΑΘΙΟΥ & REMOVE
+// 4. ΔΙΑΧΕΙΡΙΣΗ ΚΑΛΑΘΙΟΥ
 // ==========================================
-function addToCart(name, price) {
+window.addToCart = function(name, price) {
     cart.push({ name: name, price: price });
     updateCartUI();
     if(!document.getElementById('cart-drawer').classList.contains('active')) toggleCart();
-}
+};
 
-function removeFromCart(index) {
+window.removeFromCart = function(index) {
     cart.splice(index, 1);
     updateCartUI();
-}
+};
 
 function updateCartUI() {
-    document.getElementById('cart-count').innerText = cart.length;
+    const countEl = document.getElementById('cart-count');
     const cartItems = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    if (!countEl || !cartItems || !totalEl) return;
+
+    countEl.innerText = cart.length;
     cartItems.innerHTML = "";
     let total = 0;
     
@@ -89,7 +106,7 @@ function updateCartUI() {
             </div>`;
     });
     
-    document.getElementById('cart-total').innerText = total.toFixed(2);
+    totalEl.innerText = total.toFixed(2);
     const paypalContainer = document.getElementById('paypal-button-container');
     paypalContainer.innerHTML = '';
 
@@ -97,13 +114,13 @@ function updateCartUI() {
         if(isLoggedIn) {
             renderPayPal(total);
         } else {
-            paypalContainer.innerHTML = `<button class="add-btn" onclick="openAuth()">LOGIN ΓΙΑ ΑΓΟΡΑ</button>`;
+            paypalContainer.innerHTML = `<button class="main-btn-auth" onclick="openAuth()">LOGIN ΓΙΑ ΑΓΟΡΑ</button>`;
         }
     }
 }
 
 // ==========================================
-// 4. PAYPAL & EMAIL (ΜΕ PHONE MODEL)
+// 5. PAYPAL & EMAIL
 // ==========================================
 function renderPayPal(totalAmount) {
     paypal.Buttons({
@@ -133,9 +150,7 @@ function renderPayPal(totalAmount) {
                 const phone = document.getElementById('customer-phone').value;
                 const model = document.getElementById('phone-model').value;
                 const itemsStr = cart.map(i => i.name).join(", ");
-                
                 sendOrderEmail(details.payer.name.given_name, phone, model, itemsStr, totalAmount);
-                
                 alert('Η παραγγελία πέτυχε! Θα λάβετε SMS στο ' + phone);
                 cart = []; updateCartUI(); toggleCart();
             });
@@ -147,25 +162,25 @@ function sendOrderEmail(name, phone, model, items, total) {
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         from_name: name,
         customer_phone: phone,
-        phone_model: model, // Μην ξεχάσεις το {{phone_model}} στο EmailJS!
+        phone_model: model,
         order_items: items,
         total_price: total + "€"
     });
 }
 
 // ==========================================
-// 5. LOGIN, MODALS & UTILS
+// 6. LOGIN & MODALS
 // ==========================================
-function toggleAuthType() {
+window.toggleAuthType = function() {
     isLogin = !isLogin;
     document.getElementById('auth-title').innerText = isLogin ? "Σύνδεση" : "Εγγραφή";
     document.querySelector('.main-btn-auth').innerText = isLogin ? "Είσοδος" : "Δημιουργία Λογαριασμού";
     document.getElementById('auth-switch').innerText = isLogin ? "Δεν έχεις λογαριασμό; Εγγραφή" : "Έχεις ήδη λογαριασμό; Σύνδεση";
-}
+};
 
-document.querySelector('.main-btn-auth').onclick = function() {
-    const email = document.querySelector('#auth-modal input[type="email"]').value;
-    const pass = document.querySelector('#auth-modal input[type="password"]').value;
+window.handleAuth = function() {
+    const email = document.getElementById('email-input').value;
+    const pass = document.getElementById('pass-input').value;
     if (!email || !pass) { alert("Συμπλήρωσε τα πεδία!"); return; }
     
     if (!isLogin) { 
@@ -176,14 +191,14 @@ document.querySelector('.main-btn-auth').onclick = function() {
         if (localStorage.getItem(email) === pass) {
             isLoggedIn = true;
             alert("Καλώς ήρθες!");
-            document.querySelector('.auth-btn').innerText = "Account: " + email.split('@')[0];
+            document.querySelector('.auth-btn').innerText = "User: " + email.split('@')[0];
             closeAuth();
             updateCartUI();
         } else { alert("Λάθος στοιχεία!"); }
     }
 };
 
-function openAuth() { document.getElementById('auth-modal').style.display = 'block'; }
-function closeAuth() { document.getElementById('auth-modal').style.display = 'none'; }
-function toggleCart() { document.getElementById('cart-drawer').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-function closeAll() { closeAuth(); if(document.getElementById('cart-drawer').classList.contains('active')) toggleCart(); }
+window.openAuth = function() { document.getElementById('auth-modal').style.display = 'block'; document.getElementById('overlay').classList.add('active'); };
+window.closeAuth = function() { document.getElementById('auth-modal').style.display = 'none'; if(!document.getElementById('cart-drawer').classList.contains('active')) document.getElementById('overlay').classList.remove('active'); };
+window.toggleCart = function() { document.getElementById('cart-drawer').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); };
+window.closeAll = function() { closeAuth(); if(document.getElementById('cart-drawer').classList.contains('active')) toggleCart(); };
